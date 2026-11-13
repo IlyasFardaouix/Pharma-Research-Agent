@@ -1,0 +1,20 @@
+{
+  "disclaimer_visible_degraded": true,
+  "ask_disabled_degraded": true,
+  "xss_no_dom_execution": true,
+  "xss_answer_escaped": true,
+  "warnings_visible": true,
+  "citations_distinct_passages": true,
+  "excerpt_readable": true,
+  "trace_safe": true,
+  "mobile_no_overflow": true,
+  "structured_claim_link": true,
+  "structured_answer_no_duplicate_footer": true,
+  "ui_uses_server_timeout": true,
+  "double_click_one_post": true,
+  "cancel_pending_request": true,
+  "real_health": true,
+  "real_validation_422": true,
+  "corpus_not_served": true,
+  "path_traversal_not_served": true
+}

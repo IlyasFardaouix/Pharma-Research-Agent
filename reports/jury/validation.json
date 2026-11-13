@@ -1,0 +1,66 @@
+{
+  "date_utc": "2026-11-13T03:18:50.421939+00:00",
+  "contract": "literal_focus_selection_and_full_source_excerpts",
+  "python": "3.11.15",
+  "offline_tests": 271,
+  "browser_checks": 87,
+  "docker_checks": 14,
+  "image": "sha256:dd98558866a7d461bdbb82db9ef4e4e8ef97f7b87a7786ed1171f705ea1f0c34",
+  "docker_summary": "Image reconstruite ; fichiers identiques au dossier ; UID 10001, sources non modifiables, cache accessible, aucun .env embarqué ; contrôles HTTP et documents liés à leur empreinte réussis.",
+  "provider_summary": {
+    "passed": 15,
+    "total": 15,
+    "planned": 15,
+    "abstained": 4,
+    "http_errors": 0
+  },
+  "model": "gpt-5.6-terra",
+  "embedding_model": "text-embedding-3-small",
+  "final_raw_scoring_summary": {
+    "passed": 14,
+    "total": 15,
+    "planned": 15,
+    "abstained": 4,
+    "http_errors": 0
+  },
+  "differences_between_provider_image_and_final_sources": [
+    "eval/grader.py"
+  ],
+  "latency_seconds": {
+    "median": 9.016,
+    "mean": 12.069866666666666,
+    "maximum": 28.547
+  },
+  "initial_extractive_campaign": {
+    "passed": 11,
+    "total": 15,
+    "planned": 15,
+    "abstained": 8,
+    "http_errors": 0
+  },
+  "initial_fixture_errors": [
+    "j_lisinopril",
+    "j_omeprazole"
+  ],
+  "separate_coverage_replacements": {
+    "passed": 2,
+    "total": 2,
+    "planned": 2,
+    "abstained": 0,
+    "http_errors": 0
+  },
+  "adversarial_replay": {
+    "protected": 14,
+    "total": 14,
+    "abstained": 14
+  },
+  "git_repository_present": false,
+  "public_submission_attested": false,
+  "limits": [
+    "Finite known acceptance set; no blind external clinical validation",
+    "Exact wording does not establish selection relevance or completeness",
+    "Frozen corpus and partial product registry",
+    "External provider, quotas and latency",
+    "Public repository and external submission not attested"
+  ]
+}

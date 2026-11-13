@@ -1,0 +1,52 @@
+# Public questions and narrow factual checks. Each pattern must match one sentence
+# with an inline citation to its source. These checks do not certify all clinical facts.
+questions:
+  - id: q1
+    question: "What are the main contraindications for warfarin?"
+    expected_sources: ["dailymed-warfarin.md"]
+    checks:
+      - id: warfarin_pregnancy_contraindication
+        source: dailymed-warfarin.md
+        pattern: '(?=.*\bwarfarin\b)(?=.*\bpregnan\w*\b)(?=.*\bcontraindicat\w*\b)'
+      - id: high_risk_mechanical_valve_exception
+        source: dailymed-warfarin.md
+        pattern: '(?=.*\bmechanical(?:\s+heart)?\s+valves?\b)(?=.*\bhigh\s+(?:thromboembolic\s+risk|risk\s+(?:of|for)\s+thromboembol\w*)\b)(?=.*\b(?:pregnan\w*|except\w*|exception)\b)'
+  - id: q2
+    question: "Compare the contraindications of warfarin and apixaban. What conditions are shared and which are unique to each drug?"
+    expected_sources: ["dailymed-warfarin.md", "dailymed-apixaban.md"]
+    checks:
+      - id: warfarin_hypersensitivity
+        source: dailymed-warfarin.md
+        pattern: '(?=.*\bwarfarin\b)(?=.*\bhypersensitiv\w*\b)(?=.*\bcontraindicat\w*\b)'
+      - id: apixaban_hypersensitivity
+        source: dailymed-apixaban.md
+        pattern: '(?=.*\b(?:apixaban|eliquis)\b)(?=.*\bhypersensitiv\w*\b)(?=.*\bcontraindicat\w*\b)'
+      - id: warfarin_pregnancy_distinction
+        source: dailymed-warfarin.md
+        pattern: '(?=.*\bwarfarin\b)(?=.*\bpregnan\w*\b)(?=.*\bcontraindicat\w*\b)'
+      - id: high_risk_mechanical_valve_exception
+        source: dailymed-warfarin.md
+        pattern: '(?=.*\bmechanical(?:\s+heart)?\s+valves?\b)(?=.*\bhigh\s+(?:thromboembolic\s+risk|risk\s+(?:of|for)\s+thromboembol\w*)\b)(?=.*\b(?:pregnan\w*|except\w*|exception)\b)'
+      - id: apixaban_active_bleeding
+        source: dailymed-apixaban.md
+        pattern: '(?=.*\b(?:apixaban|eliquis)\b)(?=.*\bactive\s+(?:pathological\s+)?bleeding\b)(?=.*\bcontraindicat\w*\b)'
+  - id: q3
+    question: "A patient currently on warfarin is prescribed sertraline. What is the risk of bleeding and what monitoring is recommended?"
+    expected_sources: ["dailymed-warfarin.md", "dailymed-sertraline.md"]
+    checks:
+      - id: increased_bleeding_risk
+        source: dailymed-sertraline.md
+        pattern: '(?=.*\bwarfarin\b)(?=.*\bsertraline\b)(?=.*\b(?:increas\w*|higher|greater)\b)(?=.*\bbleed\w*\b)'
+      - id: monitor_inr
+        source: [dailymed-warfarin.md, dailymed-sertraline.md]
+        pattern: '(?=.*\b(?:sertraline|warfarin)\b)(?=.*\bINR\b)(?=.*\bmonitor\w*\b)'
+  - id: q4
+    question: "A patient with an eGFR of 25 mL/min is being considered for metformin. Is metformin contraindicated at this level of renal function, and what is the threshold?"
+    expected_sources: ["dailymed-metformin.md"]
+    checks:
+      - id: metformin_contraindicated_at_25
+        source: dailymed-metformin.md
+        pattern: '(?=.*\bmetformin\b)(?=.*\b(?:eGFR|renal function)\b)(?=.*\b25\b)(?=.*\bcontraindicat\w*\b)'
+      - id: egfr_threshold_below_30
+        source: dailymed-metformin.md
+        pattern: '(?=.*\b(?:eGFR|renal function)\b)(?=.*(?:\b(?:below|under|less than)\b|<)\s*30\b)(?=.*\bcontraindicat\w*\b)'

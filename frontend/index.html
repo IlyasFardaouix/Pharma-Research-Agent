@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pharma Research Agent</title>
+  <style>
+    :root {
+      --bg: #0f1419; --panel: #1a222c; --panel2: #141b24; --border: #2a3644;
+      --text: #e6edf3; --muted: #8b98a5; --accent: #4cc2ff; --accent2: #7ee787;
+      --warn: #f0b429; --danger: #ff7b72; --btn-text: #04121f; --radius: 12px;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f6f8fa; --panel: #ffffff; --panel2: #f0f3f6; --border: #d7dee6;
+        --text: #1b2733; --muted: #566573; --accent: #0969da; --accent2: #1a7f37;
+        --warn: #8a6100; --danger: #cf222e; --btn-text: #ffffff;
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text);
+      font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 32px 16px 80px; }
+    header h1 { margin: 0 0 4px; font-size: 24px; }
+    h2 { margin: 0 0 8px; font-size: 19px; }
+    h3 { margin: 14px 0 6px; font-size: 16px; }
+    header p { margin: 0 0 24px; color: var(--muted); }
+    .card { background: var(--panel); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px; margin-bottom: 16px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .field-label { display: block; font-weight: 600; margin-bottom: 6px; }
+    .question-help, .question-meta, .review-note { margin: 4px 0 8px; color: var(--muted); font-size: 13px; }
+    .question-meta { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .submitted-question { white-space: pre-wrap; overflow-wrap: anywhere; padding: 10px; background: var(--panel2); border-radius: 8px; }
+    #result:focus, .sources li:focus { outline: 2px solid var(--accent); outline-offset: 4px; }
+    textarea { width: 100%; min-height: 76px; resize: vertical; padding: 12px;
+      background: var(--panel2); color: var(--text); border: 1px solid var(--muted);
+      border-radius: 8px; font: inherit; }
+    .row { display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
+    button { font: inherit; }
+    .btn { background: var(--accent); color: var(--btn-text); border: 0; border-radius: 8px;
+      padding: 10px 18px; font-weight: 600; font-size: 15px; cursor: pointer; }
+    .btn:disabled { opacity: .5; cursor: default; }
+    .secondary { background: var(--panel2); border: 1px solid var(--border); color: var(--text); }
+    .examples { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .chip { background: var(--panel2); border: 1px solid var(--border); color: var(--muted);
+      border-radius: 999px; padding: 5px 12px; font-size: 12.5px; cursor: pointer; }
+    .chip:hover, .chip:focus-visible { color: var(--text); border-color: var(--accent); outline: none; }
+    .chip:disabled { opacity: .55; cursor: default; }
+    .chip { min-height: 40px; }
+    #answer { white-space: pre-wrap; word-wrap: break-word; }
+    #answer strong { color: var(--text); }
+    .claims { margin: 0; padding-left: 24px; }
+    .claims li { margin: 0 0 12px; overflow-wrap: anywhere; }
+    .evidence-links { display: block; font-size: 13px; }
+    .evidence-links a, .claim-link { color: var(--accent); }
+    .exact-evidence { margin: 6px 0; }
+    .exact-evidence blockquote { white-space: pre-wrap; margin: 6px 0; padding: 8px 12px; border-left: 3px solid var(--accent); background: var(--panel2); }
+    .excerpt-identity { margin: 0 0 5px; }
+    .document-excerpt { white-space: pre-wrap; margin: 6px 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--panel2); }
+    .excerpt-origin { display: block; font-size: 13px; color: var(--muted); font-style: normal; }
+    .scope-note { border-left: 3px solid var(--warn); padding-left: 10px; font-size: 14px; }
+    .numeric-table { width: 100%; table-layout: fixed; border-collapse: collapse; margin: 8px 0; font-size: 14px; }
+    .numeric-table th, .numeric-table td { text-align: left; padding: 6px; border-bottom: 1px solid var(--border); overflow-wrap: anywhere; }
+    .numeric-table th:first-child { width: 38%; }
+    .numeric-table th:nth-child(2) { width: 20%; }
+    .comparison-columns { list-style: none; padding-left: 0; }
+    .comparison-group { min-width: 0; border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+    .comparison-group h4 { margin: 0 0 10px; font-size: 16px; }
+    .group-passages { margin: 0; padding-left: 20px; }
+    @media (min-width: 960px) {
+      main.comparison-layout { max-width: 1180px; }
+      .comparison-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+    }
+    .sources { margin: 8px 0 0; padding-left: 24px; }
+    .sources li { margin: 5px 0; overflow-wrap: anywhere; }
+    .sources blockquote { white-space: pre-wrap; margin: 6px 0 12px; padding: 8px 12px;
+      border-left: 3px solid var(--accent); background: var(--panel2); }
+    .src { color: var(--accent); font-weight: 600; }
+    .warning-list { margin: 8px 0 0; padding-left: 24px; color: var(--warn); }
+    .disclaimer { border-color: var(--warn); font-size: 14px; }
+    .health { margin: 0 0 16px; color: var(--muted); }
+    details { margin-top: 14px; }
+    summary { cursor: pointer; color: var(--muted); font-size: 13px; user-select: none; }
+    .trace { background: var(--panel2); border-radius: 8px; padding: 12px; margin-top: 10px; font-size: 13px; }
+    .trace h3 { margin: 10px 0 4px; font-size: 14px; color: var(--muted); }
+    .trace ol, .trace ul { margin: 4px 0; padding-left: 20px; }
+    .tool { font-family: ui-monospace, monospace; color: var(--accent2); }
+    .verdict { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+    .v-grounded { background: rgba(126,231,135,.15); color: var(--accent2); }
+    .v-revised  { background: rgba(240,180,41,.15); color: var(--warn); }
+    .v-ungrounded { background: rgba(255,123,114,.15); color: var(--danger); }
+    .flag { color: var(--warn); }
+    .err { color: var(--danger); }
+    .muted { color: var(--muted); }
+    .spinner { width: 15px; height: 15px; border: 2px solid var(--border); border-top-color: var(--accent);
+      border-radius: 50%; animation: spin .7s linear infinite; display: inline-block; vertical-align: -2px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <h1>💊 Pharma Research Agent</h1>
+      <p>Research the supplied drug labels and monographs with visible sources.</p>
+    </header>
+
+    <p id="health" class="health" role="status" aria-live="polite">Checking service status…</p>
+    <aside class="card disclaimer" aria-label="Medical disclaimer">
+      This is a technical demonstration over a fixed local corpus and is not medical advice.
+      Consult a qualified healthcare professional and the official prescribing information before clinical decisions.
+    </aside>
+
+    <div class="card">
+      <label class="field-label" for="q">Your question</label>
+      <p id="questionHelp" class="question-help">Use the supplied documents only. Limit: 4,000 characters. Ctrl+Enter to send.</p>
+      <textarea id="q" aria-label="Your question"
+        aria-describedby="questionHelp questionCount questionError"
+        placeholder="Ask about contraindications, interactions, dosing thresholds…"></textarea>
+      <div class="question-meta"><span id="questionCount">0 / 4,000 characters</span></div>
+      <p id="questionError" class="err" role="alert" hidden></p>
+      <div class="row">
+        <button id="ask" class="btn" disabled>Ask</button>
+        <button id="cancel" class="btn secondary" type="button" hidden>Cancel</button>
+        <span id="status" class="muted" aria-live="off"></span>
+        <span id="busyAnnouncement" class="sr-only" role="status" aria-live="polite"></span>
+      </div>
+      <div class="examples" id="examples"></div>
+    </div>
+
+    <section class="card" id="result" hidden tabindex="-1" aria-labelledby="resultTitle">
+      <h2 id="resultTitle">Result</h2>
+      <p id="resultState" class="review-note" role="status" aria-live="polite"></p>
+      <p id="comparisonScope" class="scope-note" hidden></p>
+      <p id="literalOverlap" class="review-note" hidden></p>
+      <div id="submittedBox" hidden><h3>Submitted question</h3><p id="submittedQuestion" class="submitted-question"></p></div>
+      <div id="answer"></div>
+      <div id="claimBox" hidden><h3 id="findingsTitle">Documented findings</h3><p id="findingsNote" class="review-note">Automated source review is not clinical validation. Check the exact evidence and official prescribing information.</p><ol class="claims" id="claims"></ol></div>
+      <section id="numericBox" hidden aria-labelledby="numericTitle"><h3 id="numericTitle">Conditional numerical observation</h3><p class="review-note">Numerical values only; this is not a clinical eligibility decision. Units are shown separately and are not converted or assumed equivalent.</p><ul id="numericComparisons" class="claims"></ul></section>
+      <div id="warnings" hidden><h3>Service notice</h3><ul class="warning-list" id="warningList"></ul></div>
+      <div id="sourceBox" hidden><h3>Source passages</h3><ol class="sources" id="sources"></ol></div>
+      <details id="traceBox">
+        <summary>Execution details (steps · tools · automated review)</summary>
+        <div class="trace" id="trace"></div>
+      </details>
+    </section>
+  </main>
+
+  <script>
+    const EXAMPLES = [
+      "What are the main contraindications for warfarin?",
+      "Compare the contraindications of warfarin and apixaban. What is shared and what is unique?",
+      "A patient on warfarin is prescribed sertraline. What is the bleeding risk and what monitoring is recommended?",
+      "A patient with an eGFR of 25 mL/min is considered for metformin. Is it contraindicated, and what is the threshold?",
+    ];
+    const $ = id => document.getElementById(id);
+    let controller = null, ready = false, timedOut = false;
+    const MAX_QUESTION_CHARS = 4000;
+    const COMPARISON_SCOPE = "Comparison is limited to wording in the selected source sections; absence of a listed condition does not establish clinical safety or exclusivity.";
+    const NUMERIC_CONDITION = "Numerical comparison only. Clinical interpretation requires identical units, body-surface normalization and applicable patient context.";
+    const EXAMPLE_LABELS = ["Warfarin contraindications", "Compare warfarin and apixaban", "Warfarin with sertraline", "Metformin and kidney function"];
+    let lastSubmittedQuestion = "", busyStarted = 0, busyTimer = null;
+    let answerTimeoutMs = 180000;
+    for (const [index, question] of EXAMPLES.entries()) {
+      const button = document.createElement("button");
+      button.type = "button"; button.className = "chip";
+      button.textContent = EXAMPLE_LABELS[index];
+      button.title = question;
+      button.addEventListener("click", () => { $("q").value = question; updateQuestion(); $("q").focus(); });
+      $("examples").append(button);
+    }
+    function updateQuestion() {
+      // Python's len(str) and Array.from count Unicode code points. Native
+      // maxlength counts UTF-16 units and can truncate a clinically relevant paste.
+      const count = Array.from($("q").value).length;
+      const tooLong = count > MAX_QUESTION_CHARS;
+      $("questionCount").textContent = count.toLocaleString("en-US") + " / 4,000 characters";
+      $("questionError").hidden = !tooLong;
+      $("questionError").textContent = tooLong ? "Your question is too long. Shorten it to 4,000 characters before sending. Your text has been kept in full." : "";
+      $("q").setAttribute("aria-invalid", String(tooLong));
+      $("ask").disabled = !!controller || !ready || tooLong;
+      return !tooLong;
+    }
+    function updateBusyTime() {
+      const elapsed = Math.floor((Date.now() - busyStarted) / 1000);
+      $("status").textContent = "Checking local sources and evidence. " + elapsed + "s elapsed; limit " + Math.ceil(answerTimeoutMs / 1000) + "s. You can cancel.";
+    }
+    function setBusy(busy) {
+      for (const chip of $("examples").querySelectorAll("button")) chip.disabled = busy;
+      $("cancel").hidden = !busy;
+      $("result").setAttribute("aria-busy", String(busy));
+      if (busy) {
+        busyStarted = Date.now(); updateBusyTime();
+        $("busyAnnouncement").textContent = "Request started. Checking sources and evidence can take up to " + Math.ceil(answerTimeoutMs / 1000) + " seconds. Cancel is available.";
+        if (!busyTimer) busyTimer = setInterval(updateBusyTime, 1000);
+      } else {
+        clearInterval(busyTimer); busyTimer = null; $("status").textContent = "";
+        $("busyAnnouncement").textContent = "";
+      }
+      updateQuestion();
+    }
+    async function checkHealth() {
+      try {
+        const response = await fetch("/health", { cache: "no-store" });
+        if (!response.ok) throw new Error("unavailable");
+        const h = await response.json();
+        if (Number.isFinite(h.answer_timeout) && h.answer_timeout > 0)
+          answerTimeoutMs = h.answer_timeout * 1000;
+        ready = h.status === "ok" && h.retriever_ready === true && h.llm_configured === true;
+        if (ready) $("health").textContent = "Ready - " + h.corpus_files + " source files indexed.";
+        else if (h.status === "starting") $("health").textContent = "Building the source index. Please wait...";
+        else if (!h.llm_configured) $("health").textContent = "Service unavailable: the language model is not configured.";
+        else $("health").textContent = "Service unavailable: the source index could not be prepared.";
+      } catch {
+        ready = false;
+        $("health").textContent = "Service unavailable. Retrying automatically...";
+      }
+      if (!controller) setBusy(false);
+    }
+    function prepareResult(title, question, state) {
+      $("result").hidden = false;
+      $("resultTitle").textContent = title;
+      $("resultState").textContent = state;
+      $("submittedQuestion").textContent = question || "";
+      $("submittedBox").hidden = !question;
+      $("comparisonScope").hidden = true;
+      $("literalOverlap").hidden = true;
+      $("numericBox").hidden = true;
+      document.querySelector("main").classList.remove("comparison-layout");
+    }
+    function focusResult() {
+      $("result").focus({ preventScroll: true });
+      $("result").scrollIntoView({ block: "start" });
+    }
+    function showMessage(message, title = "Request unavailable") {
+      prepareResult(title, lastSubmittedQuestion, "No answer was published for this request.");
+      $("answer").hidden = false;
+      $("answer").textContent = message;
+      $("claimBox").hidden = true;
+      $("warnings").hidden = true;
+      $("sourceBox").hidden = true;
+      $("traceBox").hidden = true;
+      focusResult();
+    }
+    function errorText(data, status) {
+      const detail = data && data.detail;
+      if (typeof detail === "string") return detail;
+      if (Array.isArray(detail)) return detail.map(item => item.msg || "Invalid request").join("; ");
+      return "HTTP " + status;
+    }
+    function renderBold(text) {
+      const root = $("answer"); root.replaceChildren();
+      const parts = String(text || "(no answer)").split(/\*\*([^*]+)\*\*/g);
+      parts.forEach((part, index) => {
+        if (index % 2) {
+          const strong = document.createElement("strong");
+          strong.textContent = part; root.append(strong);
+        } else root.append(document.createTextNode(part));
+      });
+    }
+    function renderList(container, values) {
+      container.replaceChildren();
+      for (const value of values) {
+        const item = document.createElement("li");
+        item.textContent = String(value); container.append(item);
+      }
+    }
+    function fullDocumentLink(citation) {
+      const file = String(citation.file || "");
+      const sha256 = String(citation.document_sha256 || "");
+      // Only local, content-pinned document routes can be followed from a result.
+      if (!/^[A-Za-z0-9][A-Za-z0-9_-]*\.md$/.test(file) || !/^[a-fA-F0-9]{64}$/.test(sha256)) return null;
+      const link = document.createElement("a");
+      link.href = "/sources/" + encodeURIComponent(file) + "?sha256=" + encodeURIComponent(sha256.toLowerCase());
+      link.textContent = "Read full document";
+      link.target = "_blank"; link.rel = "noopener noreferrer";
+      link.setAttribute("aria-label", "Read full document: " + file + " (opens in a new tab)");
+      return link;
+    }
+    function sourceLink(target, text) {
+      const link = document.createElement("a");
+      link.href = "#" + target; link.textContent = text;
+      link.addEventListener("click", event => {
+        event.preventDefault();
+        const source = $(target);
+        const disclosure = source.querySelector("details");
+        if (disclosure) disclosure.open = true;
+        source.tabIndex = -1;
+        history.replaceState(null, "", "#" + target);
+        source.focus({ preventScroll: true });
+        source.scrollIntoView({ block: "start" });
+      });
+      return link;
+    }
+    function render(data, question = lastSubmittedQuestion, moveFocus = false) {
+      const claims = Array.isArray(data.claims) ? data.claims : [];
+      const citations = Array.isArray(data.citations) ? data.citations : [];
+      const sourceExcerpts = data.response_mode === "source_excerpts";
+      const review = data.grounding;
+      const approved = review && review.supported === true && ["grounded", "revised"].includes(review.verdict)
+        && (!sourceExcerpts || review.scope === "source_provenance")
+        && (!Array.isArray(review.flags) || review.flags.length === 0);
+      const structured = data.status === "answered" && claims.length > 0 && approved;
+      if (!structured && data.status !== "abstained") {
+        showMessage("The response did not contain a verified answer. Please retry with a narrower question.");
+        return;
+      }
+      if (structured && sourceExcerpts) {
+        const used = new Set();
+        const exact = claims.every(claim => {
+          const ids = Array.isArray(claim.passage_ids) ? claim.passage_ids : [];
+          if (ids.length !== 1 || used.has(ids[0])) return false;
+          used.add(ids[0]);
+          const matching = citations.filter(citation => citation.passage_id === ids[0]);
+          return matching.length === 1 && typeof claim.text === "string" && claim.text.length > 0
+            && matching[0].excerpt === claim.text && Array.isArray(matching[0].claim_ids)
+            && matching[0].claim_ids.includes(claim.id);
+        });
+        if (!exact) {
+          showMessage("The response did not preserve an exact, unambiguous source attribution. No excerpts were published.");
+          return;
+        }
+      }
+      prepareResult(structured ? (sourceExcerpts ? "Evidence from the documents" : "Source-based answer") : "No verified answer", question,
+        structured ? (sourceExcerpts
+          ? "The passages below are reproduced from the supplied documents. Automated selection does not establish clinical correctness or completeness."
+          : "The automated review accepted the cited evidence. This does not establish clinical correctness.")
+          : "The available evidence or automated checks did not support a complete answer.");
+      $("findingsTitle").textContent = sourceExcerpts ? "Exact source passages" : "Documented findings";
+      $("findingsNote").textContent = sourceExcerpts
+        ? "These selected passages retain their original wording but may cover only part of a source section. Automated source selection and review are not clinical validation; read the full document."
+        : "Automated source review is not clinical validation. Check the exact evidence and official prescribing information.";
+      $("claimBox").dataset.responseMode = sourceExcerpts ? "source_excerpts" : "summary";
+      const comparison = structured && sourceExcerpts && data.comparison_scope === COMPARISON_SCOPE;
+      if (comparison) {
+        $("comparisonScope").textContent = COMPARISON_SCOPE;
+        $("comparisonScope").hidden = false;
+        const byDrug = new Map();
+        for (const citation of citations) {
+          if (!citation.drug) continue;
+          const drug = String(citation.drug);
+          const words = String(citation.excerpt || "").toLowerCase().match(/\b[a-z][a-z-]{4,}\b/g) || [];
+          if (!byDrug.has(drug)) byDrug.set(drug, new Set());
+          for (const word of words) byDrug.get(drug).add(word);
+        }
+        const terms = Array.isArray(data.common_terms) && byDrug.size >= 2
+          ? [...new Set(data.common_terms)].slice(0, 24).filter(term => typeof term === "string"
+            && /^[a-z][a-z-]{4,}$/.test(term) && [...byDrug.values()].every(words => words.has(term))) : [];
+        if (terms.length) {
+          $("literalOverlap").textContent = "Shared literal terms: " + terms.join(", ") + ". Word overlap does not establish clinical equivalence.";
+          $("literalOverlap").hidden = false;
+        }
+      }
+      let answer = String(data.answer || "(no answer)");
+      if (data.disclaimer && answer.endsWith(data.disclaimer))
+        answer = answer.slice(0, -data.disclaimer.length).trimEnd();
+      answer = answer.replace(/\n\s*Sources:[^\n]*\s*$/, "").trimEnd();
+      renderBold(answer);
+      const warnings = Array.isArray(data.warnings) ? data.warnings : [];
+      renderList($("warningList"), warnings.length ? [structured
+        ? "The service reported a limitation. Check the quoted evidence and the scope of the supplied documents."
+        : "The service could not verify a complete response. Try a narrower question or check the scope of the supplied documents."] : []);
+      $("warnings").hidden = warnings.length === 0;
+      const sourceList = $("sources"); sourceList.replaceChildren();
+      const seen = new Set();
+      const sourceByPassage = new Map();
+      for (const citation of structured ? citations : []) {
+        const file = String(citation.file || "Unknown source");
+        const section = String(citation.section || "");
+        const excerpt = String(citation.excerpt || "");
+        const key = String(citation.passage_id || file + "\0" + section + "\0" + excerpt);
+        if (seen.has(key)) continue;
+        seen.add(key);
+        const item = document.createElement("li");
+        item.id = "source-" + seen.size;
+        if (citation.passage_id) sourceByPassage.set(String(citation.passage_id), item.id);
+        const name = document.createElement("span");
+        name.className = "src"; name.textContent = file; item.append(name);
+        const detail = [section, citation.product || citation.drug, citation.source].filter(Boolean).join(" - ");
+        if (detail) item.append(document.createTextNode(" - " + detail));
+        if (excerpt) {
+          const evidence = document.createElement("details");
+          const summary = document.createElement("summary");
+          summary.textContent = "Read source excerpt";
+          const quote = document.createElement("blockquote");
+          quote.textContent = excerpt;
+          evidence.append(summary, quote);
+          item.append(evidence);
+        }
+        const claimIds = Array.isArray(citation.claim_ids) ? citation.claim_ids : [];
+        if (claimIds.length) {
+          const linked = document.createElement("small");
+          linked.textContent = "Linked claims: " + claimIds.map(String).join(", ");
+          item.append(linked);
+        }
+        const fullDocument = fullDocumentLink(citation);
+        if (fullDocument) {
+          const links = document.createElement("span"); links.className = "evidence-links";
+          links.append(fullDocument); item.append(links);
+        }
+        sourceList.append(item);
+      }
+      $("sourceBox").hidden = seen.size === 0;
+      $("answer").hidden = structured;
+      $("claimBox").hidden = !structured;
+      const claimList = $("claims"); claimList.replaceChildren();
+      const comparisonGroups = new Map();
+      claimList.classList.toggle("comparison-columns", comparison);
+      document.querySelector("main").classList.toggle("comparison-layout", comparison);
+      if (structured) {
+        for (const claim of claims) {
+          const item = document.createElement("li");
+          item.id = "claim-" + String(claim.id || "").replace(/[^a-zA-Z0-9_-]/g, "");
+          const ids = Array.isArray(claim.passage_ids) ? claim.passage_ids : [];
+          if (sourceExcerpts) {
+            const citation = citations.find(value => value.passage_id === ids[0]);
+            const identity = document.createElement("p"); identity.className = "excerpt-identity";
+            const label = document.createElement("strong");
+            const parts = [];
+            if (citation.drug) parts.push("Drug: " + String(citation.drug));
+            if (citation.product) parts.push("Product: " + String(citation.product));
+            if (citation.section) parts.push("Section: " + String(citation.section));
+            label.textContent = parts.length ? parts.join(" · ") : "Document: " + String(citation.file);
+            identity.append(label);
+            const quote = document.createElement("blockquote"); quote.className = "document-excerpt";
+            quote.textContent = claim.text;
+            const origin = document.createElement("cite"); origin.className = "excerpt-origin";
+            origin.textContent = String(citation.file);
+            item.append(identity, quote, origin);
+          } else {
+            const label = document.createElement("strong"); label.textContent = String(claim.id || "") + ": ";
+            item.append(label, document.createTextNode(String(claim.text || "")));
+          }
+          const links = document.createElement("span");
+          links.className = "evidence-links";
+          for (const passageId of ids) {
+            const target = sourceByPassage.get(String(passageId));
+            if (!target) continue;
+            const link = sourceLink(target, "Read source " + target.slice("source-".length));
+            links.append(link, document.createTextNode(" "));
+          }
+          item.append(links);
+          const check = Array.isArray(review.claim_checks)
+            ? review.claim_checks.find(value => value.claim_id === claim.id && value.supported === true) : null;
+          const evidence = check && Array.isArray(check.evidence) ? check.evidence : [];
+          const exact = evidence.filter(value => ids.includes(value.passage_id)
+            && typeof value.quote === "string" && value.quote.trim()
+            && citations.some(source => source.passage_id === value.passage_id && String(source.excerpt || "").includes(value.quote)));
+          if (!sourceExcerpts && exact.length) {
+            const disclosure = document.createElement("details"); disclosure.className = "exact-evidence";
+            const summary = document.createElement("summary"); summary.textContent = "Exact evidence for this finding";
+            disclosure.append(summary);
+            for (const value of exact) {
+              const quote = document.createElement("blockquote"); quote.textContent = value.quote;
+              const source = citations.find(citation => citation.passage_id === value.passage_id);
+              const label = document.createElement("small"); label.textContent = String(source.file || "Source passage");
+              disclosure.append(quote, label);
+            }
+            item.append(disclosure);
+          }
+          if (comparison) {
+            const citation = citations.find(value => value.passage_id === ids[0]);
+            const key = JSON.stringify([citation.drug || citation.file, citation.product_id || citation.product || ""]);
+            if (!comparisonGroups.has(key)) {
+              const group = document.createElement("li"); group.className = "comparison-group";
+              const heading = document.createElement("h4");
+              heading.textContent = [citation.drug, citation.product].filter(Boolean).join(" · ") || String(citation.file);
+              const passages = document.createElement("ol"); passages.className = "group-passages";
+              group.append(heading, passages); claimList.append(group); comparisonGroups.set(key, passages);
+            }
+            comparisonGroups.get(key).append(item);
+          } else claimList.append(item);
+        }
+      }
+      const numerical = $("numericComparisons"); numerical.replaceChildren();
+      if (structured && sourceExcerpts && Array.isArray(data.numeric_comparisons)) {
+        for (const observation of data.numeric_comparisons) {
+          const target = sourceByPassage.get(observation.passage_id);
+          const validNumber = value => typeof value === "string" && /^\d+(?:[.,]\d+)?$/.test(value);
+          if (observation.variable !== "eGFR" || !target || !validNumber(observation.question_value)
+            || !validNumber(observation.source_threshold) || !["below", "equal", "above"].includes(observation.relation)
+            || typeof observation.question_unit !== "string" || !observation.question_unit.trim()
+            || typeof observation.source_unit !== "string" || !observation.source_unit.trim()
+            || observation.condition !== NUMERIC_CONDITION) continue;
+          const item = document.createElement("li");
+          const label = document.createElement("strong"); label.textContent = "eGFR — numerical values"; item.append(label);
+          const table = document.createElement("table"); table.className = "numeric-table";
+          const head = document.createElement("thead"); const heading = document.createElement("tr");
+          for (const text of ["Origin", "Number", "Unit as written"]) {
+            const cell = document.createElement("th"); cell.scope = "col"; cell.textContent = text; heading.append(cell);
+          }
+          head.append(heading); table.append(head);
+          const body = document.createElement("tbody");
+          for (const row of [["Question", observation.question_value, observation.question_unit],
+                             ["Source threshold", observation.source_threshold, observation.source_unit]]) {
+            const line = document.createElement("tr");
+            for (const [index, text] of row.entries()) {
+              const cell = document.createElement(index ? "td" : "th");
+              if (!index) cell.scope = "row";
+              cell.textContent = text; line.append(cell);
+            }
+            body.append(line);
+          }
+          table.append(body); item.append(table);
+          const relation = document.createElement("p");
+          const symbol = {below: "<", equal: "=", above: ">"}[observation.relation];
+          relation.textContent = "Numerically: " + observation.question_value + " " + symbol + " " + observation.source_threshold + " (" + observation.relation + ").";
+          const condition = document.createElement("p"); condition.className = "scope-note"; condition.textContent = NUMERIC_CONDITION;
+          item.append(relation, condition, sourceLink(target, "Read the source threshold in context"));
+          numerical.append(item);
+        }
+      }
+      $("numericBox").hidden = numerical.childElementCount === 0;
+      const trace = $("trace"); trace.replaceChildren();
+      function heading(label) {
+        const h = document.createElement("h3"); h.textContent = label; trace.append(h);
+      }
+      if (structured && Array.isArray(data.plan) && data.plan.length) {
+        heading(data.plan_kind === "workflow_summary" ? "Workflow summary" : "Plan");
+        const list = document.createElement("ol"); renderList(list, data.plan); trace.append(list);
+      }
+      if (Array.isArray(data.tool_trace) && data.tool_trace.length) {
+        heading("Tool calls");
+        const list = document.createElement("ul");
+        for (const call of data.tool_trace) {
+          const item = document.createElement("li");
+          item.textContent = String(call.tool || "tool") + (structured
+            ? "(" + JSON.stringify(call.args || {}) + "): " + String(call.result_summary || "") : " (completed invocation)");
+          list.append(item);
+        }
+        trace.append(list);
+      }
+      if (data.grounding) {
+        heading(sourceExcerpts ? "Automated selection review" : "Review");
+        const verdict = document.createElement("span");
+        const requestedVerdict = String(data.grounding.verdict || "unknown");
+        const value = ["grounded", "revised", "ungrounded"].includes(requestedVerdict) ? requestedVerdict : "unknown";
+        verdict.className = "verdict " + (["grounded", "revised", "ungrounded"].includes(value) ? "v-" + value : "");
+        verdict.textContent = sourceExcerpts
+          ? ({grounded: "passage selection accepted", revised: "passage selection revised", ungrounded: "no passage selection approved"}[value] || "selection review unavailable")
+          : value;
+        trace.append(verdict);
+        const note = document.createElement("p"); note.textContent = "This is an automated document check, not a clinical validation."; trace.append(note);
+      }
+      $("traceBox").hidden = !trace.childNodes.length;
+      if (moveFocus) focusResult();
+    }
+    async function ask() {
+      if (controller || !ready) return;
+      if (!updateQuestion()) { $("q").focus(); return; }
+      const question = $("q").value.trim();
+      if (!question) { $("q").focus(); return; }
+      lastSubmittedQuestion = question;
+      controller = new AbortController(); timedOut = false;
+      setBusy(true); $("result").hidden = true;
+      const timer = setTimeout(() => { timedOut = true; controller.abort(); }, answerTimeoutMs + 10000);
+      try {
+        const response = await fetch("/ask", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question }), signal: controller.signal,
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(errorText(data, response.status));
+        render(data, question, true);
+      } catch (error) {
+        if (error.name === "AbortError")
+          showMessage(timedOut ? "The request timed out. Try a narrower question." : "Request cancelled.", timedOut ? "Request timed out" : "Request cancelled");
+        else showMessage(error.message || "The request failed.");
+      } finally {
+        clearTimeout(timer); controller = null; setBusy(false); checkHealth();
+      }
+    }
+    $("cancel").addEventListener("click", () => { if (controller) controller.abort(); });
+    $("ask").addEventListener("click", ask);
+    $("q").addEventListener("input", updateQuestion);
+    $("q").addEventListener("keydown", event => {
+      if ((event.metaKey || event.ctrlKey) && event.key === "Enter") ask();
+    });
+    checkHealth(); setInterval(checkHealth, 10000);
+  </script>
+</body>
+</html>
+

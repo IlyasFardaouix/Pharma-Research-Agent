@@ -1,0 +1,3 @@
+# Preserve validated bytes across Windows/Linux checkouts. Corpus citations and
+# validation receipts use exact SHA-256 fingerprints, including line endings.
+* -text

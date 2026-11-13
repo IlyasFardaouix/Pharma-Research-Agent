@@ -1,0 +1,21 @@
+{
+  "method": "offline deliberately optimistic reviewer, not a live model observation",
+  "question": "What are the main contraindications for warfarin?",
+  "selected_context": "12.1 Mechanism of Action",
+  "passage_id": "dailymed-warfarin@7d55941843a0:37057-37710",
+  "status": "answered",
+  "literal_publication": true,
+  "public_rubric_ok": false,
+  "public_rubric_failures": [
+    "warfarin contraindications coverage missing: pregnancy exception",
+    "warfarin contraindications coverage missing: bleeding disorders",
+    "warfarin contraindications coverage missing: surgery",
+    "warfarin contraindications coverage missing: bleeding sites",
+    "warfarin contraindications coverage missing: obstetric conditions",
+    "warfarin contraindications coverage missing: supervision",
+    "warfarin contraindications coverage missing: procedures",
+    "warfarin contraindications coverage missing: hypersensitivity",
+    "warfarin contraindications coverage missing: anesthesia",
+    "warfarin contraindications coverage missing: hypertension"
+  ]
+}

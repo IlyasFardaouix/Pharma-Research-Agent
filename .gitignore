@@ -1,0 +1,30 @@
+# Secrets
+.env
+.env.local
+.env.*
+!.env.example
+.claude/settings.local.json
+
+# Confidential assignment brief — must NOT be published to a public repo
+assignment-pharma.pdf
+*.pdf
+
+# Embedding cache (rebuilt on demand)
+.cache/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.venv*/
+venv/
+env/
+env*/
+*.egg-info/
+dist/
+build/
+
+# Generated delivery artifacts
+output/
+tmp/

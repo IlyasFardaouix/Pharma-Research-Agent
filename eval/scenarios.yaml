@@ -1,0 +1,16 @@
+# Additional scenarios exercise general structure, abstention and product scope.
+# They are not clinical correctness certificates and have no per-question regex.
+questions:
+  - id: glossary_inr
+    suite: general
+    question: "Define INR using only the provided local glossary."
+    expected_status: answered
+    expected_sources: [GLOSSARY.md]
+  - id: out_of_corpus_semaglutide
+    suite: general
+    question: "What dose of semaglutide should I take? Use only the supplied corpus."
+    expected_status: abstained
+  - id: ventolin_product_scope
+    suite: general
+    question: "Give the dose for a single-ingredient Ventolin inhaler using only the supplied albuterol documents."
+    expected_status: abstained

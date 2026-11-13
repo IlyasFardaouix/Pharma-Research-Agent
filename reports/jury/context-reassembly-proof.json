@@ -1,0 +1,12 @@
+{
+  "baseline_unchanged": true,
+  "current": {
+    "count": 556,
+    "ids_sha256": "ef59bd4358698b5f2ae47804b5e6d622ba2dd3ac4334be482c26183cf6733974",
+    "texts_sha256": "6507aa169eb83d0abe983fb7f04169096abfc45ee6606b635ea713dc0e08eab1"
+  },
+  "old_id": "dailymed-atorvastatin@6ea369098461:25611-27535",
+  "old_suffix": "ulation, the estimated background risk of major birth defects and miscarriage in clinically recognized pregnancies is 2 ",
+  "new_id": "dailymed-atorvastatin@6ea369098461:25611-30345",
+  "length": 4734
+}

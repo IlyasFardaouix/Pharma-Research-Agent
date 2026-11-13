@@ -83,7 +83,7 @@ port distinct, par exemple `127.0.0.1:8002:8000`, puis ouvrir
 joignable. Le code, le corpus et l'interface sont locaux ; les appels modèle et
 embeddings restent externes.
 
-## Présentation facultative en dix minutes
+## Parcours proposé pour la présentation demandée de dix minutes
 
 Préparer le service et vérifier une question courte avant la présentation. Garder
 la clé et `.env` hors du partage d'écran. Prévoir un ou deux appels en direct : la

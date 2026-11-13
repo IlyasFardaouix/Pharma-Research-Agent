@@ -16,7 +16,7 @@ wording while keeping the agent's planning, retrieval and review workflow.
 > sources are relevant, complete or clinically sufficient.
 
 Open **http://localhost:8000** after starting the service. See [DEMO.md](DEMO.md) for
-simple user instructions and an optional ten-minute walkthrough.
+simple user instructions and a suggested walkthrough for the required ten-minute presentation.
 
 ## How an answer is produced
 
@@ -128,7 +128,13 @@ local initialization and configuration, not continuous provider availability.
 
 ## Start with Docker
 
+From the project root, create `.env` only if the evaluator or your provider has
+not already supplied it, then fill in authorized provider values before running
+Docker. Never overwrite an existing credential file with the example.
+
 ```powershell
+if (-not (Test-Path -LiteralPath .env)) { Copy-Item -LiteralPath .env.example -Destination .env }
+# Complete .env locally before continuing.
 docker build -t agent .
 docker run --name pharma-demo --rm -p 127.0.0.1:8000:8000 --env-file .env agent
 ```

@@ -4,6 +4,7 @@ Uses actual corpus contexts and a deliberately optimistic review, including an
 explicit entailed verdict. It does not measure a real model's attack frequency.
 """
 from pathlib import Path
+import argparse
 import json
 import sys
 
@@ -18,7 +19,7 @@ from app.rag.index import Passage
 from app.rag.loader import get_section_chunks, load_corpus
 
 
-def run():
+def run(output: Path):
     chunks = load_corpus(ROOT / "corpus")
     cases = [
         ("reversed_exception", "warfarin", "contraindications", "Warfarin is contraindicated during pregnancy, including pregnant women with mechanical heart valves at high risk of thromboembolism."),
@@ -61,7 +62,7 @@ def run():
         "scope": "Textual fidelity only; exact but irrelevant evidence is still possible when a reviewer is wrong.",
         "summary": {"protected": sum(r["protected"] for r in records), "total": len(records),
                     "abstained": sum(r["status"] == "abstained" for r in records)}, "results": records}
-    target = ROOT / "reports/jury/adversarial-replay.json"
+    target = output
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report["summary"]))
@@ -69,4 +70,6 @@ def run():
 
 
 if __name__ == "__main__":
-    raise SystemExit(run())
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, default=ROOT / ".cache/adversarial-replay.json")
+    raise SystemExit(run(parser.parse_args().output))

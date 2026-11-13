@@ -12,5 +12,6 @@ qualifications, l'authenticité et la complétude exigées ne changent pas.
 `http-focus-final.json` reste immuable. `regrade_http.py` produit un autre fichier,
 `http-focus-regraded.json`, qui conserve chaque `original_score`, le résumé brut,
 l'empreinte du rapport source et celle du barème corrigé. Aucun appel fournisseur
-n'est effectué pour ce recalcul. Cela n'efface pas les refus des campagnes
+n'est effectué pour ce recalcul. Le script courant écrit par défaut dans
+`.cache/http-focus-regraded.json`, sans remplacer la preuve publiée. Cela n'efface pas les refus des campagnes
 antérieures et ne fusionne pas un retest dans une série artificiellement parfaite.

@@ -179,21 +179,19 @@ embeddings dépendent toujours du fournisseur externe.
 | Corpus fourni conservé | 21 fichiers inchangés, fragments d'indexation inchangés | Comparaison des sources, SHA-256, offsets Unicode/CRLF et textes d'embedding. |
 | Docker à la racine, `/health`, `/ask`, frontend | Dockerfile, FastAPI et interface statique | Reconstruction et essais HTTP/navigateur du contrat actuel ; le fournisseur reste externe. |
 | Questions publiques et questions cachées | `eval/questions.yaml`, scénarios et évaluateur générique | Provenance générique, contrôles factuels limités, cas aveugles et lecture des réponses sensibles. |
-| Configuration IA, dépôt public et présentation de dix minutes | `.claude/CLAUDE.md`, plan initial conservé et guide `DEMO.md` | Livrable préparé localement pour validation ; dépôt public et remise restent des étapes distinctes, non effectuées par cette préparation. |
+| Configuration IA, dépôt public et présentation de dix minutes | `.claude/CLAUDE.md`, plan initial conservé, dépôt GitHub public et guide `DEMO.md` | Code et configuration publiés ; vérifier la CI du commit remis. L'envoi du lien et du résumé au recrutement reste une action distincte. |
 
 ## Validation et statut des preuves
 
 Les résultats consolidés du contrat `source_excerpts` sont disponibles
 sous `reports/jury/` : **271 tests**, **87 contrôles navigateur**, **14 contrôles
 Docker/HTTP**, et une campagne réelle **15/15 après correction documentée d'un
-faux négatif du barème** (score brut 14/15 conservé). Les chiffres historiques **144 tests**, **18 contrôles
-navigateur** et **6/7 scénarios dans une série complète** appartiennent au contrat
-précédent. Le retest réussi de comparaison était un essai distinct. Ils restent
-consultables dans [`VALIDATION.md`](VALIDATION.md) et les anciens rapports, sans
-servir de certification pour la nouvelle version.
+faux négatif du barème** (score brut 14/15 conservé). [`VALIDATION.md`](VALIDATION.md)
+précise les conditions des essais. Les campagnes intermédiaires appartiennent à
+l'historique Git ; elles ne sont pas utilisées comme certification du contrat actuel.
 
 Les vérifications génériques recalculent les empreintes des documents et contrôlent
 les spans, IDs, liens, textes exacts, statuts et revues. Les quatre questions publiques
 ajoutent un barème factuel étroit. Ces deux niveaux doivent être distingués des essais
-réels du modèle et de la validation clinique. Le rapport final, l'archive et les
-captures doivent refléter le contrat effectivement testé avant toute remise.
+réels du modèle et de la validation clinique. Les preuves enregistrées sont datées ;
+la CI du commit effectivement remis constitue une vérification distincte.

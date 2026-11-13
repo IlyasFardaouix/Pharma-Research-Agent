@@ -1,49 +1,34 @@
-# Chronologie et portée des preuves
+# Preuves finales conservées
 
-Cette campagne suit l'audit indépendant Astra du 13 novembre 2026 et le choix
-explicite de privilégier les extraits exacts. Les rapports de prose antérieurs
-dans `reports/` restent historiques. Aucun résultat n'est réécrit en succès.
+Ce dossier contient les preuves utiles pour examiner le livrable, sans les
+journaux intermédiaires ni les audits successifs. Les fichiers de mesure ne sont
+pas réécrits lors du nettoyage du dépôt.
 
-- `initial-*` : défauts de la version initialement examinée ; certains résultats
-  utilisent volontairement un critique optimiste simulé, sans appel fournisseur.
-- `section-fix-intermediate.json` : état intermédiaire après correction des alias
-  de dosage, avant la frontière extractive. Ses publications de fausses phrases
-  ne décrivent donc pas le résultat final.
-- `context-reassembly-*` : preuve du contexte complet et des 556 textes d'index
-  inchangés. Aucun fichier du corpus n'est réécrit.
-- `adversarial-replay.json` : nouveau replay avec verdict `entailed` explicitement
-  injecté. Mesure la non-publication de phrases falsifiées, pas une fréquence
-  réelle d'attaque ni une garantie de pertinence de toute preuve choisie.
-- `browser-*.json` : état UI, réponses de génération interceptées ; ce ne sont pas
-  des validations médicales ni des réponses réelles du fournisseur.
-- `http-acceptance.json` : campagne séquentielle de vrais appels `/ask`, avec
-  provenance, critères publics renforcés, téléchargements des sources, durée et
-  empreintes des fichiers. Les cas généraux sans barème factuel indépendant
-  établissent surtout structure, sources et statut attendu.
-- `validation.json` : synthèse mesurée de cette version.
-- `http-focus-final.json` : réponses de la version avec focus littéraux, score brut
-  14/15 immuable. `http-focus-regraded.json` conserve chaque ancien score et le
-  recalcul 15/15 après correction de la notation eGFR), sans nouvel appel.
-- `astra-before-focus-review.md` et `astra-focus-final-review.md` : deux états
-  distincts ; la dernière revue couvre les quinze réponses et les seize citations.
-- `focus-relevance-limit.json` : un critique optimiste peut encore approuver un
-  contexte exact mais hors sujet. Le barème le rejette ; cette injection n'est pas
-  une erreur observée du fournisseur réel.
+| Fichier | Portée |
+|---|---|
+| `validation.json` | Synthèse datée des campagnes, paramètres, succès, refus et limites. |
+| `offline-tests.xml` | 271 tests hors réseau. |
+| `browser-final.json` | 87 contrôles du navigateur avec génération interceptée. |
+| `docker-final.json` | 14 contrôles Docker/HTTP et empreintes de l'image enregistrée. |
+| `http-focus-final.json` | 15 cas avec fournisseur réel ; résultat brut 14/15. |
+| `http-focus-regraded.json` | Mêmes réponses, 15/15 après correction du faux négatif Q4 ; anciens scores conservés. |
+| `scoring-correction.md` | Justification précise de cette correction. |
+| `adversarial-replay.json` | 14 injections de fausses phrases avec critique optimiste ; contrôle de fidélité textuelle. |
+| `focus-relevance-limit.json` | Limite observée : une source exacte peut être sélectionnée hors sujet. |
+| `corpus-integrity.json` | Comparaison des 21 documents avec leur état initial. |
+| `context-reassembly-proof.json` | 556 fragments et 456 contextes complets contrôlés. |
 
-Le nouveau barème est décrit dans `eval/README.md`. Les scénarios additionnels
-ont été fixés avant les nouveaux appels réels ; ce n'est pas un jeu aveugle externe.
-Tout retest est enregistré séparément et ne transforme pas la série complète.
+Les preuves précèdent la publication Git et son nettoyage. Les anciens champs
+« dépôt absent » sont des constats historiques. Les empreintes décrivent les
+fichiers de la campagne enregistrée ; elles ne sont pas un état en direct du
+serveur ou de la branche courante. La CI GitHub contrôle le commit effectivement
+poussé. Aucun résultat ne constitue une validation clinique.
 
-La revue de pertinence et de complétude reste faillible, même quand le texte est
-strictement littéral. Le projet est une démonstration locale, sans validation
-clinique. Aucun dépôt public ou envoi de remise n'est attesté par ces fichiers.
+Les essais intermédiaires, notamment les refus et erreurs de fixtures, restent
+consultables dans
+[l'historique antérieur au nettoyage](https://github.com/IlyasFardaouix/Pharma-Research-Agent/tree/5385352214a2dfbf65e5a5da7326482751318e67/reports).
+Ils ne sont pas fusionnés avec le résultat final. Les originaux restent aussi
+conservés localement hors des fichiers publiés.
 
-## Archive livrable
-
-`package-smoke.json` et `package-tests.xml` attestent 271 tests réussis après
-extraction du ZIP dans un dossier neuf sans `.env`, avec import de l’application
-depuis cette extraction. Les dépendances sont celles de l’environnement verrouillé
-existant ; ce contrôle ne prétend pas réaliser une installation à froid. Le paquet
-final inclut ces preuves et conserve les empreintes du code testé.
-
-`pdf-verification.json` consigne les 26 pages et leur vérification visuelle.
+Les commandes de reproduction sont dans [VALIDATION.md](../../VALIDATION.md).
+Les nouveaux essais écrivent dans `.cache/` par défaut et préservent ces preuves.

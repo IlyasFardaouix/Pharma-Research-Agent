@@ -96,10 +96,9 @@ embedding services remain external dependencies.
 
 Consolidated validation evidence is under `reports/jury/`: 271 offline tests,
 87 browser checks, 14 Docker/HTTP checks, and 15/15 real-provider cases after a
-documented evaluator notation fix (14/15 raw retained). The former **144 tests**, **18 browser checks** and **6/7 complete
-model run** are historical results from the earlier contract, with a separate
-comparison retest. Do not relabel or combine them as a pass for the current version.
-Check or regenerate delivery reports, screenshots and archives after validation.
+documented evaluator notation fix (14/15 raw retained). Intermediate audits and
+authoring utilities are excluded from the current submission tree and retained
+locally and in Git history. Keep recorded evidence distinct from new runs.
 
 Exact source wording and verified provenance prevent invented public medical
 wording. They do not certify relevance, completeness, up-to-date source material,
@@ -114,9 +113,9 @@ review of grounding, products, runtime and interface behavior. Project-scoped
 retrieval requires no MCP server; it uses the supplied local corpus.
 The requested technical jury used GPT-6 Astra in a separate context. It later
 contributed the extractive grader and its tests; this is not blind external
-evaluation. Its initial and final critiques, and all campaign corrections, are
-preserved under reports/jury/.
+evaluation. Final validation evidence and the documented scoring correction are
+preserved under reports/jury/; earlier critiques remain in Git history.
 
 The human author remains responsible for explaining and verifying the deliverable,
-including AI-assisted changes. This revision prepares a local result for validation;
-it does not publish a Git repository or deploy a public service.
+including AI-assisted changes. The repository is public; the demonstration remains
+a local service. Repository publication does not submit the recruitment email.

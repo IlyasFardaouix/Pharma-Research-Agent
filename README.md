@@ -1,8 +1,6 @@
 # Pharma Research Agent
 
 Public repository: [IlyasFardaouix/Pharma-Research-Agent](https://github.com/IlyasFardaouix/Pharma-Research-Agent).
-See [publication and submission status](docs/PUBLICATION.md) for the distinction
-between repository publication, recorded local validation and external submission.
 
 A research assistant for a fixed local pharmacology corpus: DailyMed labels,
 MedlinePlus monographs and a glossary. It plans a search, chooses its own corpus
@@ -160,7 +158,7 @@ uvicorn app.main:app --reload --port 8000
 
 On systems using a Unix shell, activate with `source .venv311/bin/activate`.
 Bind the demo to localhost. Public hosting needs deployment-specific access control
-and transport protection; this preparation does not publish a repository or service.
+and transport protection. Publishing this repository does not expose the local API.
 
 ## Verify the current version
 
@@ -185,8 +183,7 @@ metformin/eGFR. Passing these checks does not prove every interpretation correct
 checks passed. The real-provider campaign has 11 answers and four expected
 abstentions. Its raw score was 14/15; the same answers score 15/15 after fixing a
 documented Q4 notation false negative, without a new model call or weaker criteria.
-See [VALIDATION.md](VALIDATION.md), `reports/jury/` and the independent Astra review.
-The former 144 tests, 18 browser checks and 6/7 prose run remain historical.
+See [VALIDATION.md](VALIDATION.md) and the retained evidence in `reports/jury/`.
 Exact wording does not guarantee relevance, completeness or clinical correctness.
 
 With the server running and Edge installed, the browser smoke script is:
@@ -199,10 +196,20 @@ It intercepts model calls to exercise the UI; a live provider check is separate.
 
 ## Delivery and AI transparency
 
-[DEMO.md](DEMO.md) provides the user walkthrough; [LIVRAISON.md](LIVRAISON.md) lists the
-existing delivery assets. [`.claude/CLAUDE.md`](.claude/CLAUDE.md) documents the AI
+[DEMO.md](DEMO.md) provides the ten-minute walkthrough and
+[ARCHITECTURE.md](ARCHITECTURE.md) maps the assignment requirements to the code.
+[`.claude/CLAUDE.md`](.claude/CLAUDE.md) documents the AI
 working configuration and the retained original implementation plan.
 
-After validation and artifact regeneration, `python scripts/package_delivery.py`
-prepares a local archive excluding secrets, caches, environments and the confidential
-assignment PDF. Repository publication remains a separate action.
+The repository includes the code, original corpus, frontend, Dockerfile, pinned
+dependencies, tests, evaluation cases, essential documentation and project AI
+configuration. Secrets, caches, local environments, the confidential assignment,
+intermediate audits and PDF-authoring tools are excluded from the current tree.
+Final evidence is retained with its original failures and documented regrading;
+older development records remain available in Git history.
+
+The assignment requires emailing the public repository link and a short approach
+summary to the recruitment contact before **13 November 2026, 23:59 Casablanca**.
+The last commit pushed before that deadline is assessed. Repository publication
+does not send that email. A ten-minute presentation is also required; slides are
+optional and a code walkthrough is accepted. See [DEMO.md](DEMO.md).

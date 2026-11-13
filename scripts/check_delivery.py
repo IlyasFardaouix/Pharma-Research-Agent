@@ -16,7 +16,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--container", default="pharma-final")
     parser.add_argument("--url", default="http://127.0.0.1:8000")
-    parser.add_argument("--output", type=Path, default=ROOT / "reports/jury/docker-validation.json")
+    parser.add_argument("--output", type=Path, default=ROOT / ".cache/docker-validation.json")
     args = parser.parse_args()
     checks = {}
     remote_code = """from pathlib import Path

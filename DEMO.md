@@ -100,12 +100,9 @@ latence du fournisseur peut dépasser le temps disponible pour quatre questions.
 | 8:00–9:00 | Les preuves de validation disponibles | Distinguer tests hors réseau, navigateur intercepté et appels réels du modèle. |
 | 9:00–10:00 | Les limites | Fidélité des mots, sélection faillible, corpus limité et dépendance fournisseur. |
 
-Les preuves consolidées de cette révision sont enregistrées dans
-`reports/jury/`. Les anciens chiffres de **144 tests**, **18 contrôles navigateur**
-et **6/7 dans une série modèle complète** sont historiques et concernent le contrat
-précédent. Ne pas les annoncer comme validation de la révision `source_excerpts`.
-Les anciennes captures ou réponses peuvent illustrer un essai daté, en l'identifiant
-explicitement ; elles ne remplacent pas un appel réel ou une validation actuelle.
+Les preuves finales sont conservées dans `reports/jury/` et expliquées dans
+`VALIDATION.md`. Distinguer les appels réels du fournisseur des tests interceptés.
+Un résultat enregistré illustre un essai daté ; il ne remplace pas un appel en direct.
 
 ## Montrer l'API, si utile
 
@@ -149,5 +146,5 @@ brouillon interne ; ce jugement reste faillible.
   tels, avec leur version et leur date. Ne pas présenter une simulation comme un
   appel réel.
 
-La démonstration est validée dans le périmètre documenté et reste locale. Ce guide n'effectue aucune
-publication de service, de dépôt Git ou de résultats.
+La démonstration est validée dans le périmètre documenté et reste locale. Le dépôt
+Git est public ; l'API reste accessible uniquement sur la machine qui l'exécute.

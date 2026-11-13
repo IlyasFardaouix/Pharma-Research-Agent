@@ -28,7 +28,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--url", default="http://127.0.0.1:8000")
     parser.add_argument("--questions", nargs="+", type=Path, default=[ROOT / "eval/questions.yaml", ROOT / "eval/scenarios.yaml"])
-    parser.add_argument("--output", type=Path, default=ROOT / "reports/jury/http-acceptance.json")
+    parser.add_argument("--output", type=Path, default=ROOT / ".cache/http-acceptance.json")
     args = parser.parse_args()
     items = [item for path in args.questions for item in yaml.safe_load(path.read_text(encoding="utf-8"))["questions"]]
     validate_cases(items, ROOT / "corpus")

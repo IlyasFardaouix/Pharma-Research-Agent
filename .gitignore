@@ -28,3 +28,33 @@ build/
 # Generated delivery artifacts
 output/
 tmp/
+
+# Local authoring, diagnostics and superseded delivery paperwork
+.vscode/
+AUDIT_FINAL.md
+LIVRAISON.md
+docs/PUBLICATION.md
+eval/jury_coverage_replacements.yaml
+scripts/build_report.py
+scripts/build_jury_report.py
+scripts/capture_preview.py
+scripts/diagnose_question.py
+scripts/finalize_validation.py
+scripts/package_delivery.py
+
+# Publish only the final validation evidence; keep intermediate runs locally
+reports/*
+!reports/jury/
+reports/jury/*
+!reports/jury/README.md
+!reports/jury/offline-tests.xml
+!reports/jury/browser-final.json
+!reports/jury/docker-final.json
+!reports/jury/adversarial-replay.json
+!reports/jury/http-focus-final.json
+!reports/jury/http-focus-regraded.json
+!reports/jury/scoring-correction.md
+!reports/jury/validation.json
+!reports/jury/context-reassembly-proof.json
+!reports/jury/corpus-integrity.json
+!reports/jury/focus-relevance-limit.json
